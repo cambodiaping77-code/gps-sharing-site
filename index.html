@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPS Sharing</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 25px;
+  font-family: Arial, sans-serif;
+  background: #10101d;
+  color: white;
+  text-align: center;
+}
+
+.container {
+  max-width: 450px;
+  margin: 60px auto;
+  padding: 30px 20px;
+  background: #202033;
+  border-radius: 20px;
+}
+
+h1 {
+  color: #a970ff;
+}
+
+button {
+  width: 100%;
+  padding: 16px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 12px;
+  background: #a15be8;
+  color: white;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: .6;
+}
+
+#result {
+  margin-top: 25px;
+  line-height: 2;
+  overflow-wrap: anywhere;
+}
+
+a {
+  color: #b88cff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>📍 GPS Sharing</h1>
+
+<p>
+Allow location access to find your current location.
+</p>
+
+<button id="locate">
+Get My Location
+</button>
+
+<div id="result">
+Location not requested yet.
+</div>
+
+</div>
+
+<script>
+const button = document.getElementById("locate");
+const result = document.getElementById("result");
+
+button.addEventListener("click", () => {
+
+  if (!navigator.geolocation) {
+    result.textContent =
+      "Your browser does not support GPS.";
+    return;
+  }
+
+  button.disabled = true;
+  result.textContent = "Requesting GPS permission...";
+
+  navigator.geolocation.getCurrentPosition(
+
+    (position) => {
+
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+
+      result.innerHTML = `
+        <h3>📍 Location Found</h3>
+        <p>Latitude: ${lat}</p>
+        <p>Longitude: ${lon}</p>
+        <a target="_blank"
+           rel="noopener"
+           href="https://www.google.com/maps?q=${lat},${lon}">
+           Open Google Maps
+        </a>
+      `;
+
+      button.disabled = false;
+    },
+
+    (error) => {
+
+      result.textContent =
+        "Location permission denied or unavailable.";
+
+      button.disabled = false;
+    },
+
+    {
+      enableHighAccuracy: true,
+      timeout: 15000,
+      maximumAge: 0
+    }
+
+  );
+
+});
+</script>
+
+</body>
+</html>
