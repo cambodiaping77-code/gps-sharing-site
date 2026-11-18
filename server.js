@@ -5,14 +5,14 @@ const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname, "public")));
+// Serve files from the root directory
+app.use(express.static(__dirname));
 
+// Homepage
 app.get("/", (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "public", "index.html")
-  );
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`GPS Website running on ${PORT}`);
+  console.log(`GPS Website running on port ${PORT}`);
 });
